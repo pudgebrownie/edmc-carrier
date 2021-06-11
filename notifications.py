@@ -72,3 +72,5 @@ class CarrierNotificationDispatcher:
         arrived_at = date_util.rfc3339_to_datetime(timestamp)
         embed.add_field('Arrival Time', date_util.format_date(arrived_at, date_util.MILITARY_TIME_FORMAT))
         
+        webhook.add_embed(embed)
+        webhook.send()
