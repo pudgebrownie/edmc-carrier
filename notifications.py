@@ -15,6 +15,8 @@ class CarrierNotificationDispatcher:
 
 
     def send_jump_request_notification(self, cmdr_name, curr_system, dest_system, timestamp):
+        """Updated to remove erroneous carrier current location postings, where the cmdr is 
+        ordering the jump from another system"""
         webhook = DiscordWebhook(
             url = self.webhook_url,
             username = f"{self.carrier_name} Nav Ops"
@@ -30,7 +32,7 @@ class CarrierNotificationDispatcher:
         
         jumped_at_time = date_util.rfc3339_to_datetime(timestamp)
         lockdown_time = date_util.add_time(jumped_at_time, minutes=13, seconds=20)
-        embed.add_field('Jumping From', curr_system)
+        #embed.add_field('Jumping From', curr_system)
         embed.add_field('Arriving At', dest_system)
         embed.add_field('Estimated Lockdown', date_util.format_date(lockdown_time, date_util.MILITARY_TIME_FORMAT))
 
@@ -39,6 +41,8 @@ class CarrierNotificationDispatcher:
 
 
     def send_jump_cancellation_notification(self, cmdr_name, curr_system):
+        """Updated to remove erroneous carrier current location postings, where the cmdr is 
+        ordering the jump from another system"""
         webhook = DiscordWebhook(
             url = self.webhook_url,
             username = f"{self.carrier_name} Nav Ops"
@@ -46,10 +50,10 @@ class CarrierNotificationDispatcher:
 
         embed = DiscordEmbed(
             title = 'Carrier Jump Cancelled',
-            description = f"**CMDR {cmdr_name}** cancelled the jump of **{self.carrier_name}**. Carrier will remain at **{curr_system}**",
+            description = f"**CMDR {cmdr_name}** cancelled the jump of **{self.carrier_name}**", #. Carrier will remain at **{curr_system}**",
             color = 10824234
         )
-        embed.add_image_url(self.carrier_image_url)
+        #embed.add_image_url(self.carrier_image_url)
         
         webhook.add_embed(embed)
         webhook.send()
