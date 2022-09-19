@@ -50,7 +50,7 @@ class CarrierNotificationDispatcher:
 
         embed = DiscordEmbed(
             title = 'Carrier Jump Cancelled',
-            description = f"**CMDR {cmdr_name}** cancelled the jump of **{self.carrier_name}**", #. Carrier will remain at **{curr_system}**",
+            description = f"**CMDR {cmdr_name}** cancelled the jump of **{self.carrier_name}**",
             color = 10824234
         )
         #embed.add_image_url(self.carrier_image_url)
