@@ -90,7 +90,7 @@ def prefs_changed(cmdr, is_beta):
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     event_name = entry.get("event")
 
-    if this.use_body_info:
+    if __load_config(USE_BODY_INFO_CONFIG_KEY):
         destination = entry.get('Body')
     else:
         destination = entry.get('SystemName')
