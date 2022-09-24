@@ -101,12 +101,12 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
 
 
     if event_name == "CarrierJumpCancelled":
-        carrier_notification_dispatcher.send_jump_cancellation_notification(cmdr, system)
+        carrier_notification_dispatcher.send_jump_cancellation_notification(cmdr)
 
 
     if event_name == "CarrierJump":
         timestamp = entry.get('timestamp')
-        carrier_notification_dispatcher.send_jump_notification(system, timestamp)
+        carrier_notification_dispatcher.send_jump_notification(destination, timestamp)
 
 
 def __load_config(key):
