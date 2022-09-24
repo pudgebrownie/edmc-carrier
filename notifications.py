@@ -12,9 +12,9 @@ class CarrierNotificationDispatcher:
         self.webhook_url = kwargs.get('webhook_url', '')
         self.carrier_name = kwargs.get('carrier_name', '')
         self.carrier_image_url = kwargs.get('carrier_image_url', DEFAULT_CARRIER_IMAGE_URL)
+        self.use_body_info = kwargs.get('use_body_info', '')
 
-
-    def send_jump_request_notification(self, cmdr_name, curr_system, dest_system, timestamp):
+    def send_jump_request_notification(self, cmdr_name, destination, timestamp):
         webhook = DiscordWebhook(
             url = self.webhook_url,
             username = f"{self.carrier_name} Nav Ops"
@@ -30,15 +30,14 @@ class CarrierNotificationDispatcher:
         
         jumped_at_time = date_util.rfc3339_to_datetime(timestamp)
         lockdown_time = date_util.add_time(jumped_at_time, minutes=13, seconds=20)
-        embed.add_field('Jumping From', curr_system)
-        embed.add_field('Arriving At', dest_system)
+        embed.add_field('Arriving At', destination)
         embed.add_field('Estimated Lockdown', date_util.format_date(lockdown_time, date_util.MILITARY_TIME_FORMAT))
 
         webhook.add_embed(embed)
         webhook.send()
 
 
-    def send_jump_cancellation_notification(self, cmdr_name, curr_system):
+    def send_jump_cancellation_notification(self, cmdr_name):
         webhook = DiscordWebhook(
             url = self.webhook_url,
             username = f"{self.carrier_name} Nav Ops"
@@ -46,7 +45,7 @@ class CarrierNotificationDispatcher:
 
         embed = DiscordEmbed(
             title = 'Carrier Jump Cancelled',
-            description = f"**CMDR {cmdr_name}** cancelled the jump of **{self.carrier_name}**. Carrier will remain at **{curr_system}**",
+            description = f"**CMDR {cmdr_name}** cancelled the jump of **{self.carrier_name}**",
             color = 10824234
         )
         embed.add_image_url(self.carrier_image_url)
@@ -55,7 +54,7 @@ class CarrierNotificationDispatcher:
         webhook.send()
 
 
-    def send_jump_notification(self, dest_system, timestamp):
+    def send_jump_notification(self, destination, timestamp):
         webhook = DiscordWebhook(
             url = self.webhook_url,
             username = f"{self.carrier_name} Nav Ops"
@@ -63,7 +62,7 @@ class CarrierNotificationDispatcher:
 
         embed = DiscordEmbed(
             title = 'Carrier Has Arrived!',
-            description = f"**{self.carrier_name}** arrived at **{dest_system}**",
+            description = f"**{self.carrier_name}** arrived at **{destination}**",
             color = 8388352
         )
         embed.add_image_url(self.carrier_image_url)
@@ -72,3 +71,6 @@ class CarrierNotificationDispatcher:
         arrived_at = date_util.rfc3339_to_datetime(timestamp)
         embed.add_field('Arrival Time', date_util.format_date(arrived_at, date_util.MILITARY_TIME_FORMAT))
         
+        webhook.add_embed(embed)
+        webhook.send()
+
